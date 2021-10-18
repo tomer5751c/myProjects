@@ -1,0 +1,20 @@
+.divBorder{
+    border-radius: 4px;
+    width: 89%;
+    height: 15%;
+    border: solid,1px,steelblue;
+}
+.drag-hover .slds-tree__item-label{
+    font-weight: bold;
+    font-size:18px;
+}
+.disable-icon{
+    pointer-events: none;
+    opacity: 0.4;
+}
+.mark-search{
+    background-color: yellow;
+}
+.slds-border_bottom ,.slds-border_top ,.slds-border_right ,.slds-border_left{
+    border-radius: 8px;
+}

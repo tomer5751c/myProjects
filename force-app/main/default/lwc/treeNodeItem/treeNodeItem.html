@@ -1,0 +1,146 @@
+<template>
+    <template if:true={isShown}>
+        <li aria-expanded={isExpanded} ondrop={drop} aria-level={node.level} role="treeitem" tabindex="0">
+            <div class="slds-tree__item drag-div" onclick={expandNode} draggable={isDragable} ondragleave={dragLeave}
+                ondragover={dragOver} ondragstart={drag}>
+                <template if:false={node.new}>
+                    <lightning-layout horizontal-align="space">
+                        <!-- expaned icon -->
+                        <lightning-layout-item>
+                            <template if:true={isNotLeaf}>
+                                <lightning-icon aria-hidden="true" class="slds-m-right_x-small" size="xx-small"
+                                    if:true={isExpanded} icon-name="utility:chevrondown"></lightning-icon>
+                                <lightning-icon aria-hidden="true" class="slds-m-right_x-small" size="xx-small"
+                                    if:false={isExpanded} icon-name="utility:chevronleft"></lightning-icon>
+                            </template>
+                            <template if:false={isNotLeaf}>
+                                <lightning-icon aria-hidden="true" style="visibility:none;" class="slds-m-right_x-small"
+                                    size="xx-small"></lightning-icon>
+                            </template>
+                        </lightning-layout-item>
+                        <!-- label -->
+                        <lightning-layout-item>
+                            <span ondblclick={editNode} class="slds-has-flexi-truncate">
+                                <span if:true={node.markable} class="slds-tree__item-label slds-truncate mark-search"
+                                    title="Tree Branch">{node.label}</span>
+                                <span if:false={node.markable} class="slds-tree__item-label slds-truncate"
+                                    title="Tree Branch">{node.label}</span>
+                            </span>
+                        </lightning-layout-item>
+                        <!-- actions -->
+                        <lightning-layout-item flexibility="no-flex" padding="horizontal-small" if:true={hasPermission}>
+                            <lightning-icon aria-hidden="true" class="slds-m-right_x-small" size="xx-small"
+                                icon-name="utility:delete" onclick={deleteNode}></lightning-icon>
+                            <lightning-icon aria-hidden="true" onclick={insertNode} class="slds-m-right_x-small"
+                                size="xx-small" icon-name="utility:add"></lightning-icon>
+                            <lightning-icon aria-hidden="true" onclick={editNode} class="slds-m-right_x-small"
+                                size="xx-small" icon-name="utility:edit"></lightning-icon>
+                            <lightning-icon aria-hidden="true" onclick={orderUp} class={isFirst} size="xx-small"
+                                icon-name="utility:arrowup"></lightning-icon>
+                            <lightning-icon aria-hidden="true" onclick={orderDown} class={isLast} size="xx-small"
+                                icon-name="utility:arrowdown"></lightning-icon>
+                        </lightning-layout-item>
+
+                        <lightning-layout-item>
+                            <template if:true={node.articleHtml}>
+                                <div class="slds-p-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                    <lightning-formatted-rich-text  value={node.articleHtml}>
+                                    </lightning-formatted-rich-text>
+                                </div>
+                            </template>
+                            <template if:false={node.articleHtml}>
+                                <template if:true={node.richText}>
+                                    <div class="slds-p-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                        <lightning-formatted-rich-text  value={node.richText}>
+                                        </lightning-formatted-rich-text>
+                                    </div>
+                                </template>
+                            </template>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+                <template if:true={node.new}>
+                    <lightning-card class="slds-card_boundary" title="הוספת צומת חדש" draggable={isDragable}>
+                        <div style="min-width:70em" class="slds-p-horizontal_small">
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col">
+                                    <c-auto-complete-select name="Select Content" label="תוכן" values={options}
+                                        selected-item={node.label} onselected={handleSelection} oncancel={cancelHandler}
+                                        onenter={enterHandler}></c-auto-complete-select>
+                                </div>
+                                <div class="slds-col">
+                                    <lightning-icon class="slds-p-top_x-large" aria-hidden="true" data-type="content"
+                                        onclick={refreshOptions} size="x-small" icon-name="utility:refresh">
+                                    </lightning-icon>
+                                </div>
+                            </div>
+
+                            <lightning-layout class="slds-p-around_small">
+                                <lightning-layout-item padding="horizontal-samll">
+                                </lightning-layout-item>
+                                <lightning-layout-item>
+                                    <form class="radioForm">
+                                        <lightning-radio-group name="radioGroup" label="צור תיאור מתוך"
+                                        options={sourceOptions} value={radioGroupValue} required onchange={handleChange}
+                                        type="button" message-when-value-missing={radioButtonMissing}></lightning-radio-group>
+                                    </form>
+                                </lightning-layout-item>
+                                    
+                            </lightning-layout>
+                            <template if:true={radioGroupValue}>
+                                <template if:true={fromArticle}>
+                                    <div class="slds-grid slds-gutters">
+                                        <div class="slds-col">
+                                            <c-auto-complete-select icon-name="utility:account" label="מאמר"
+                                                name="Select Article" values={articles}
+                                                onselected={handleSelectionArticle}
+                                                selected-item={selectedArticle.selectedValue}></c-auto-complete-select>
+                                        </div>
+                                        <div class="slds-col">
+                                            <lightning-icon class="slds-p-top_x-large" aria-hidden="true"
+                                                data-type="article" onclick={refreshOptions} size="x-small"
+                                                icon-name="utility:refresh"></lightning-icon>
+                                        </div>
+                                    </div>
+                                    <template if:true={node.articleHtml}>
+                                        <label
+                                            class="slds-text-align_center slds-text-body_regular slds-p-around_small">
+                                            <h1>תצוגה מקדימה</h1>
+                                        </label>
+                                        <lightning-formatted-rich-text title="תצוגה מקדימה של מאמר"
+                                            value={node.articleHtml}>
+
+                                        </lightning-formatted-rich-text>
+
+                                    </template>
+                                </template>
+                                <template if:false={fromArticle}>
+                                    <lightning-input-rich-text style="cursor: text;" draggable="false" value={node.richText} formats={formats}
+                                        class="rich-text-value" placeholder="הזן טקסט"></lightning-input-rich-text>
+                                </template>
+                            </template>
+                        </div>
+                        <div slot="footer">
+                            <div style="text-align: center;">
+                                <lightning-icon aria-hidden="true" onclick={setNewNode} class="slds-m-right_small"
+                                    size="small" icon-name="utility:check" variant="success"></lightning-icon>
+                                <lightning-icon aria-hidden="true" onclick={cancelHandler} class="slds-m-right_small"
+                                    size="small" icon-name="utility:close" variant="error"></lightning-icon>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </template>
+
+            </div>
+            <ul role="group">
+                <template if:true={node.items} for:each={node.items} for:item="item">
+                    <c-tree-node-item new-search={newSearch} has-permission={hasPermission} ondraftevent={removeDraft}
+                        articles-options={articlesOptions} contents-options={contentsOptions} key={item.nodeId}
+                        node={item} html-str={htmlStr}>
+                    </c-tree-node-item>
+                </template>
+
+            </ul>
+        </li>
+    </template>
+</template>

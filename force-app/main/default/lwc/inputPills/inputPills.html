@@ -1,0 +1,12 @@
+<template>
+    <lightning-layout horizontal-align="center">
+        <lightning-layout-item size="2">
+            <lightning-pill-container label="vpo" items={pills} onitemremove={handleRemove}>
+            </lightning-pill-container>
+        </lightning-layout-item>
+        <lightning-layout-item>
+            <input onkeypress={keyPress}>
+        </lightning-layout-item>
+    </lightning-layout>
+
+</template>

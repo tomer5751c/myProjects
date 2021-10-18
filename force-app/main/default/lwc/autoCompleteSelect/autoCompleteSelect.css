@@ -1,0 +1,9 @@
+datalist {
+    max-height: 10px;
+    overflow-y: auto;
+}
+
+.slds-dropdown {
+    left: 50% !important;
+	right: auto !important;
+}

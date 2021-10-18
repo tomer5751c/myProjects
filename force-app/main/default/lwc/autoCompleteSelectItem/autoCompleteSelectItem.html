@@ -1,0 +1,36 @@
+<template>
+    <template if:true={isSelected}>
+        <li role="presentation" class="slds-listbox__item">
+            <div aria-selected="true" aria-checked="true"
+                class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small slds-is-selected slds-has-focus"
+                role="option" onclick={selectOption}>
+                <span class="slds-media__figure slds-listbox__option-icon">
+                    <span
+                        class="slds-icon_container slds-icon-utility-check slds-current-color">
+                        <lightning-icon icon-name="utility:check" variant="success" alternative-text="Check" title="Check" size="x-small"></lightning-icon>
+                    </span>
+                </span>
+                <span class="slds-media__body">
+                    <span class="slds-truncate slds-listbox__option-text slds-listbox__option-text_entity" title={name}>{label}</span>
+                </span>
+            </div>
+        </li>
+    </template>
+    <template if:false={isSelected}>
+        <li role="presentation" class="slds-listbox__item">
+            <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small"
+                role="option" onclick={selectOption}>
+                <span class="slds-media__figure slds-listbox__option-icon">
+                    <span
+                        class="slds-icon_container">
+                        <lightning-icon icon-name="standard:article" size="x-small"></lightning-icon>
+                    </span>
+                </span>
+                <span class="slds-media__body">
+                    <span class="slds-truncate slds-listbox__option-text slds-listbox__option-text_entity" title={name}>{label}</span>
+                    <span class="slds-listbox__option-text slds-listbox__option-text_entity" >{moreDetails}</span>
+                </span>
+            </div>
+        </li>
+    </template>
+</template>

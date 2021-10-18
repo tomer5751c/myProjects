@@ -1,0 +1,9 @@
+<template>
+    <lightning-card title="Event platform Test">
+        <div>
+            <h1>Account Name: {accountName}</h1>
+            is allowd to manage the tree ? <lightning-input type="checkbox" checked={isAllowed}></lightning-input>
+            The last platform event update :<lightning-formatted-date-time value={lastTime} hour="2-digit" minute="2-digit" weekday="long"></lightning-formatted-date-time>
+        </div>
+    </lightning-card>
+</template>
