@@ -18,3 +18,6 @@
 .slds-border_bottom ,.slds-border_top ,.slds-border_right ,.slds-border_left{
     border-radius: 8px;
 }
+:host {
+    --sds-c-checkbox-toggle-mark-color-foreground:transparent;
+}

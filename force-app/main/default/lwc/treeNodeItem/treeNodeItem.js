@@ -1,5 +1,6 @@
 import { LightningElement, api, track } from 'lwc';
-
+import { loadStyle } from 'lightning/platformResourceLoader';
+import SAMPLE_CSS from '@salesforce/resourceUrl/customStyle';
 export default class TreeNodeItem extends LightningElement {
     @api node;
     @api htmlStr;
@@ -9,7 +10,7 @@ export default class TreeNodeItem extends LightningElement {
     @track articles = [];
     @track fromArticle;
     @track radioGroupValue;
-
+    @track overrideContent;
     isShown
     selectedContent = { selectedValue: '' };
     selectedArticle = { selectedValue: '' };
@@ -41,6 +42,12 @@ export default class TreeNodeItem extends LightningElement {
         if (value) {
             this.articles = JSON.parse(JSON.stringify(value));
         }
+    }
+    connectedCallback(){
+        this.overrideContent = this.node.isContentOverride;
+    }
+    handleOverride(event){
+        this.overrideContent = event.target.checked;
     }
     handleChange(event) {
         const selectedOption = event.detail.value;
@@ -122,6 +129,7 @@ export default class TreeNodeItem extends LightningElement {
     }
     renderedCallback() {
         const div = this.template.querySelector('.divBorder');
+        Promise.all([loadStyle(this, SAMPLE_CSS)]);
         if (div) {
             div.innerHTML = this.htmlStr;
         }
@@ -224,11 +232,12 @@ export default class TreeNodeItem extends LightningElement {
             value = inputValue.selectedItem;
         }
         const richText = this.template.querySelector('.rich-text-value');
+        let copy = this.copyNode(this.node);
         if (richText && this.node) {
-            let copy = this.copyNode(this.node);
             copy.richText = richText.value;
-            this.node = copy;
         }
+        copy.isContentOverride =this.overrideContent;
+        this.node = copy;
         const editNode = new CustomEvent('editnode', {
             detail: {
                 node: this.node,

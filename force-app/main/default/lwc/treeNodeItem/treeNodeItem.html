@@ -4,7 +4,7 @@
             <div class="slds-tree__item drag-div" onclick={expandNode} draggable={isDragable} ondragleave={dragLeave}
                 ondragover={dragOver} ondragstart={drag}>
                 <template if:false={node.new}>
-                    <lightning-layout horizontal-align="space">
+                    <lightning-layout multiple-rows>
                         <!-- expaned icon -->
                         <lightning-layout-item>
                             <template if:true={isNotLeaf}>
@@ -40,8 +40,7 @@
                             <lightning-icon aria-hidden="true" onclick={orderDown} class={isLast} size="xx-small"
                                 icon-name="utility:arrowdown"></lightning-icon>
                         </lightning-layout-item>
-
-                        <lightning-layout-item>
+                        <lightning-layout-item class="slds-p-top_small slds-p-left_medium" size="12">
                             <template if:true={node.articleHtml}>
                                 <div class="slds-p-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
                                     <lightning-formatted-rich-text  value={node.articleHtml}>
@@ -56,8 +55,10 @@
                                     </div>
                                 </template>
                             </template>
+                        
                         </lightning-layout-item>
                     </lightning-layout>
+                    
                 </template>
                 <template if:true={node.new}>
                     <lightning-card class="slds-card_boundary" title="הוספת צומת חדש" draggable={isDragable}>
@@ -74,7 +75,7 @@
                                     </lightning-icon>
                                 </div>
                             </div>
-
+                            <lightning-input class="slds-p-around_small" type="toggle" label="שמור והצג את התיאור מתוך הצומת"  checked={overrideContent} onchange={handleOverride} name="input1"></lightning-input>
                             <lightning-layout class="slds-p-around_small">
                                 <lightning-layout-item padding="horizontal-samll">
                                 </lightning-layout-item>
@@ -132,6 +133,9 @@
                 </template>
 
             </div>
+            <!-- <div class="slds-p-top_small slds-p-left_xx-large" style="width: fit-content;">
+                
+            </div> -->
             <ul role="group">
                 <template if:true={node.items} for:each={node.items} for:item="item">
                     <c-tree-node-item new-search={newSearch} has-permission={hasPermission} ondraftevent={removeDraft}

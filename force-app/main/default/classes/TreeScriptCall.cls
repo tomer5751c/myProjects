@@ -155,15 +155,18 @@ public with sharing class TreeScriptCall{
 			name = d.id;
 			isContentOverride=d.Override_Content__c;
 			items = new List<TreeNode>();
-			if(d.Override_Content__c){
-				articleId = d.articleId__c;
-			 	richText =d.richText__c;
-			}
-			else if (d.Content__c != null){
+			
+			if (d.Content__c != null){
 				if (contents.containsKey(d.Content__c)){
 					label = contents.get(d.Content__c).Label__c;
-					articleId = contents.get(d.Content__c).ArticleId__c;
-					richText = contents.get(d.Content__c).Description__c;
+					if(d.Override_Content__c){
+						articleId = d.articleId__c;
+						 richText =d.richText__c;
+					}
+					else{
+						articleId = contents.get(d.Content__c).ArticleId__c;
+						richText = contents.get(d.Content__c).Description__c;
+					}
 				}
 			}
 			parentId = d.parentDecision__c;

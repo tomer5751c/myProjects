@@ -107,26 +107,31 @@ export default class CallScript extends LightningElement {
         this.setDecisionsTree();
     }
 
-    createContent(contentLabel,description,article) {
+    createContent(contentLabel,description,article,isContentOverride) {
         const fields = {};
         fields[contentFields.LABEL_FIELD.fieldApiName] = contentLabel;
-        fields[contentFields.DESCRIPTION_FIELD.fieldApiName] = description;
-        fields[contentFields.CONTENTARTICLEID_FIELD.fieldApiName] = article;
+        if(!isContentOverride){
+            fields[contentFields.DESCRIPTION_FIELD.fieldApiName] = description;
+            fields[contentFields.CONTENTARTICLEID_FIELD.fieldApiName] = article;
+        }
 
         const recordInput = { apiName: CONTENT_OBJECT.objectApiName, fields };
         return createRecord(recordInput);
 
     }
-    createDecision(body, parentId, contentId, lastItem,articleId) {
+    createDecision(body, parentId, contentId, lastItem,articleId,isContentOverride) {
         const fields = {};
         this.loading = true;
         fields[decisionFields.TREEID_FIELD.fieldApiName] = this.selectedTree;
-        //fields[decisionFields.RICHTEXT_FIELD.fieldApiName] = body;
         fields[decisionFields.PARENT_DECISION_FIELD.fieldApiName] = parentId;
         fields[decisionFields.CONTENT_FIELD.fieldApiName] = contentId;
-        // if(articleId){
-        //     fields[decisionFields.ARTICLEID_FIELD.fieldApiName] = articleId;
-        // }
+        if(isContentOverride){
+            fields[decisionFields.RICHTEXT_FIELD.fieldApiName] = body;
+            if(articleId){
+                fields[decisionFields.ARTICLEID_FIELD.fieldApiName] = articleId;
+            }
+        }
+        fields[decisionFields.OVERRIDE_CONTENT_FIELD.fieldApiName] = isContentOverride;
         fields[decisionFields.ORDER_FIELD.fieldApiName] = lastItem ? lastItem.order + 1 : 1;
 
         const recordInput = { apiName: DECISION_OBJECT.objectApiName, fields };
@@ -258,7 +263,7 @@ export default class CallScript extends LightningElement {
         }
         return res;
     }
-    checkDuplication(label,description,article) {
+    checkDuplication(label,description,article,isContentOverride) {
         let options = this.contentsOptions.filter(v => v.label === label);
         const fields={};
         return new Promise((resolve, reject) => {
@@ -271,13 +276,15 @@ export default class CallScript extends LightningElement {
                 }
                 if(Object.keys(fields).length >0){
                     fields[contentFields.CONTENTID.fieldApiName] = options[0].value;
-                    this.updateContent(fields); 
+                    if(!isContentOverride){
+                        this.updateContent(fields); 
+                    }
                 }
                 resolve(options[0].value);
             }
             else {
                 this.loading = true;
-                this.createContent(label,description,article).then(res => {
+                this.createContent(label,description,article,isContentOverride).then(res => {
                     console.log(res);
                     this.setContents();
                     this.loading = false;
@@ -306,16 +313,19 @@ export default class CallScript extends LightningElement {
         const label = event.detail.label;
         const fields = {};
 
-        this.checkDuplication(label,n.richText,n.articleId).then(id => {
+        this.checkDuplication(label,n.richText,n.articleId,n.isContentOverride).then(id => {
             if (!n.nodeId) {
-                this.createDecision(n.richText ? n.richText :label, n.parentId, id, n.lastItem,n.articleId);
+                this.createDecision(n.richText ? n.richText :label, n.parentId, id, n.lastItem,n.articleId,n.isContentOverride);
             }
             else {
-                // if(n.articleId){
-                //     fields[decisionFields.ARTICLEID_FIELD.fieldApiName] = n.articleId;
-                // }
+                if(n.isContentOverride){
+                    fields[decisionFields.RICHTEXT_FIELD.fieldApiName] = n.richText ? n.richText :label;
+                    if(n.articleId){
+                        fields[decisionFields.ARTICLEID_FIELD.fieldApiName] = n.articleId;
+                    }
+                }
                 fields[decisionFields.DECISIONID_FIELD.fieldApiName] = n.nodeId;
-               // fields[decisionFields.RICHTEXT_FIELD.fieldApiName] = n.richText ? n.richText :label;
+                fields[decisionFields.OVERRIDE_CONTENT_FIELD.fieldApiName] = n.isContentOverride;
                 fields[decisionFields.CONTENT_FIELD.fieldApiName] = id;
                 this.updateDecision(fields);
             }

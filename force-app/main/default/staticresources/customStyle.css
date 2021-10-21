@@ -1,0 +1,12 @@
+.slds-tree [role=treeitem]:focus>.slds-tree__item{
+    text-decoration: none;
+}
+[aria-expanded=true]>.slds-tree__item .slds-button__icon{
+    transform: rotate(0deg);
+}
+[aria-expanded=false]>.slds-tree__item .slds-button__icon{
+    transform: rotate(0deg);
+}
+[dir=rtl] [aria-expanded=true]>.slds-tree__item .slds-button__icon{
+    transform: rotate(0deg);
+}
