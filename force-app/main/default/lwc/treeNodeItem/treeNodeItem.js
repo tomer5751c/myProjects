@@ -11,6 +11,7 @@ export default class TreeNodeItem extends LightningElement {
     @track fromArticle;
     @track radioGroupValue;
     @track overrideContent;
+    @track closeDescrption=false;
     isShown
     selectedContent = { selectedValue: '' };
     selectedArticle = { selectedValue: '' };
@@ -54,6 +55,10 @@ export default class TreeNodeItem extends LightningElement {
         this.fromArticle = selectedOption === 'article';
         this.radioGroupValue = selectedOption;
         this.radioButtonMissing = undefined;
+    }
+    openCloseDescrption(event){
+        this.closeDescrption =! this.closeDescrption;
+        event.stopPropagation();
     }
     dragOver(ev) {
         let offset = this.oldY - ev.pageY;
@@ -190,6 +195,14 @@ export default class TreeNodeItem extends LightningElement {
         this.orderEvent(1);
         event.stopPropagation();
     }
+    openRecord(e){
+        if(e.which === 2 ){
+            window.open(`${location.origin}/lightning/r/Decision__c/${this.node.nodeId}/view`, '_blank').focus();
+            e.stopPropagation();
+            return false;
+        }
+        
+    }
     orderEvent(dir) {
         const orderEvent = new CustomEvent('orderevent', {
             detail: {
@@ -279,7 +292,6 @@ export default class TreeNodeItem extends LightningElement {
         event.stopPropagation();
     }
     handleSelectionArticle(event) {
-        debugger
         this.selectedArticle.selectedValue = event.detail.value;
         let copy = this.copyNode(this.node);
         copy.articleHtml = this.articles.find(v => v.value == event.detail.key)?.info;
@@ -313,5 +325,8 @@ export default class TreeNodeItem extends LightningElement {
     }
     get isDragable() {
         return this.node.parentId !== undefined && this.node.parentId !== null && !this.node.new;
+    }
+    get hasDescrption(){
+        return this.node.articleHtml?.length >0 || this.node.richText?.length>0;
     }
 }

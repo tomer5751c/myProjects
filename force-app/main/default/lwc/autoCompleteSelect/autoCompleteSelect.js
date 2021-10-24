@@ -182,6 +182,7 @@ export default class AutoCompleteSelect extends LightningElement {
         this.dispatchEvent(eventToDispatch);
     }
     selectOption(event) {
+        debugger
         event.preventDefault();
         this.selectedItemName = event.detail.value;
         this.selectedItemValue = event.detail.value;

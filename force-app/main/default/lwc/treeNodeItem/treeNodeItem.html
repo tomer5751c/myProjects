@@ -20,7 +20,7 @@
                         </lightning-layout-item>
                         <!-- label -->
                         <lightning-layout-item>
-                            <span ondblclick={editNode} class="slds-has-flexi-truncate">
+                            <span ondblclick={editNode} onmousedown={openRecord} class="slds-has-flexi-truncate">
                                 <span if:true={node.markable} class="slds-tree__item-label slds-truncate mark-search"
                                     title="Tree Branch">{node.label}</span>
                                 <span if:false={node.markable} class="slds-tree__item-label slds-truncate"
@@ -29,6 +29,9 @@
                         </lightning-layout-item>
                         <!-- actions -->
                         <lightning-layout-item flexibility="no-flex" padding="horizontal-small" if:true={hasPermission}>
+                            <c-tree-admin-actions ondeletenode={deleteNode} oninsertnode={insertNode} oneditnode={editNode} onorderup={orderUp} onorderdown={orderDown} is-first={isFirst} is-last={isLast}></c-tree-admin-actions>
+                        </lightning-layout-item>
+                        <!-- <lightning-layout-item flexibility="no-flex" padding="horizontal-small" if:true={hasPermission}>
                             <lightning-icon aria-hidden="true" class="slds-m-right_x-small" size="xx-small"
                                 icon-name="utility:delete" onclick={deleteNode}></lightning-icon>
                             <lightning-icon aria-hidden="true" onclick={insertNode} class="slds-m-right_x-small"
@@ -39,29 +42,53 @@
                                 icon-name="utility:arrowup"></lightning-icon>
                             <lightning-icon aria-hidden="true" onclick={orderDown} class={isLast} size="xx-small"
                                 icon-name="utility:arrowdown"></lightning-icon>
-                        </lightning-layout-item>
+                        </lightning-layout-item> -->
                         <lightning-layout-item class="slds-p-top_small slds-p-left_medium" size="12">
-                            <template if:true={node.articleHtml}>
-                                <div class="slds-p-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
-                                    <lightning-formatted-rich-text  value={node.articleHtml}>
-                                    </lightning-formatted-rich-text>
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col slds-size_11-of-12" if:false={closeDescrption}>
+                                    <template if:true={node.articleHtml}>
+                                        <div class="slds-p-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                            <lightning-formatted-rich-text  value={node.articleHtml}>
+                                            </lightning-formatted-rich-text>
+                                        </div>
+                                    </template>
+                                    <template if:false={node.articleHtml}>
+                                        <template if:true={node.richText}>
+                                            <div class="slds-p-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
+                                                <lightning-formatted-rich-text  value={node.richText}>
+                                                </lightning-formatted-rich-text>
+                                            </div>
+                                        </template>
+                                    </template>
                                 </div>
-                            </template>
-                            <template if:false={node.articleHtml}>
-                                <template if:true={node.richText}>
-                                    <div class="slds-p-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
-                                        <lightning-formatted-rich-text  value={node.richText}>
-                                        </lightning-formatted-rich-text>
+                                <div class="slds-col slds-size_11-of-12" if:true={closeDescrption}>
+                                    המאמר או התוכן מוסתר
+                                </div>
+                                <div if:true={hasDescrption}>
+                                    <div class="slds-col slds-size_1-of-12" if:false={closeDescrption}>
+                                        <lightning-button-icon title="הסתר תוכן או מאמר" icon-name="utility:dash" size="x-small" onclick={openCloseDescrption}></lightning-button-icon>
                                     </div>
-                                </template>
-                            </template>
+                                    <div class="slds-col" if:true={closeDescrption}>
+                                        <lightning-button-icon title="הצג תוכן או מאמר" icon-name="utility:expand" size="x-small" onclick={openCloseDescrption}></lightning-button-icon>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         
                         </lightning-layout-item>
                     </lightning-layout>
                     
                 </template>
                 <template if:true={node.new}>
-                    <lightning-card class="slds-card_boundary" title="הוספת צומת חדש" draggable={isDragable}>
+                    <lightning-card class="slds-card_boundary" draggable={isDragable}>
+                        <div slot="title">
+                            <template if:true={node.nodeId}>
+                                עריכת צומת
+                            </template>
+                            <template if:false={node.nodeId}>
+                                הוספת צומת חדש
+                            </template>
+                        </div>
                         <div style="min-width:70em" class="slds-p-horizontal_small">
                             <div class="slds-grid slds-gutters">
                                 <div class="slds-col">
