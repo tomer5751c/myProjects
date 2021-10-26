@@ -239,22 +239,24 @@ export default class TreeNodeItem extends LightningElement {
         //     }
         //     return;
         // }
-        const inputValue = this.template.querySelector('c-auto-complete-select');
-        let value;
-        if (inputValue) {
-            value = inputValue.selectedItem;
-        }
-        const richText = this.template.querySelector('.rich-text-value');
-        let copy = this.copyNode(this.node);
-        if (richText && this.node) {
-            copy.richText = richText.value;
-        }
-        copy.isContentOverride =this.overrideContent;
-        this.node = copy;
-        const editNode = new CustomEvent('editnode', {
+        // const inputValue = this.template.querySelector('c-auto-complete-select');
+        // let value;
+        // if (inputValue) {
+        //     value = inputValue.selectedItem;
+        // }
+        // const richText = this.template.querySelector('.rich-text-value');
+        // if (richText && this.node) {
+            //     copy.richText = richText.value;
+            // }
+            // copy.isContentOverride =this.overrideContent;
+            let copy = this.copyNode(this.node);
+            copy.richText =event.detail.richText;
+            copy.isContentOverride=event.detail.isContentOverride;
+            this.node = copy;
+            const editNode = new CustomEvent('editnode', {
             detail: {
                 node: this.node,
-                label: value ? value : this.node.label
+                label: event.detail.label
             },
             bubbles: true,
             composed: true

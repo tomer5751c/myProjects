@@ -79,7 +79,7 @@
                     </lightning-layout>
                     
                 </template>
-                <template if:true={node.new}>
+                <!-- <template if:true={node.new}>
                     <lightning-card class="slds-card_boundary" draggable={isDragable}>
                         <div slot="title">
                             <template if:true={node.nodeId}>
@@ -157,20 +157,22 @@
                             </div>
                         </div>
                     </lightning-card>
-                </template>
-
+                </template> -->
+                <c-node-editor if:true={node.new} articles-options={articlesOptions} contents-options={contentsOptions} is-dragable={isDragable} node={node}
+                onenterevent={enterHandler} oncancelevent={cancelHandler} onnewnodeevent={setNewNode}
+                oncontentselected ={handleSelection} onarticleselected={handleSelectionArticle}
+                ></c-node-editor>
             </div>
             <!-- <div class="slds-p-top_small slds-p-left_xx-large" style="width: fit-content;">
                 
             </div> -->
             <ul role="group">
                 <template if:true={node.items} for:each={node.items} for:item="item">
-                    <c-tree-node-item new-search={newSearch} has-permission={hasPermission} ondraftevent={removeDraft}
+                    <c-tree-node-item if:true={item} new-search={newSearch} has-permission={hasPermission} ondraftevent={removeDraft}
                         articles-options={articlesOptions} contents-options={contentsOptions} key={item.nodeId}
                         node={item} html-str={htmlStr}>
                     </c-tree-node-item>
                 </template>
-
             </ul>
         </li>
     </template>
