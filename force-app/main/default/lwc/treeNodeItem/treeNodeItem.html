@@ -79,7 +79,7 @@
                     </lightning-layout>
                     
                 </template>
-                <template if:true={node.new}>
+                <template if:true={node.newT}>
                     <lightning-card class="slds-card_boundary" draggable={isDragable}>
                         <div slot="title">
                             <template if:true={node.nodeId}>
@@ -158,10 +158,10 @@
                         </div>
                     </lightning-card>
                 </template>
-                <!-- <c-node-editor if:true={node.new} articles-options={articlesOptions} contents-options={contentsOptions} is-dragable={isDragable} node={node}
+                <c-node-editor if:true={node.new} articles-options={articlesOptions} contents-options={contentsOptions} is-dragable={isDragable} node={node}
                 onenterevent={enterHandler} oncancelevent={cancelHandler} onnewnodeevent={setNewNode}
                 oncontentselected ={handleSelection} onarticleselected={handleSelectionArticle}
-                ></c-node-editor> -->
+                ></c-node-editor>
             </div>
             <!-- <div class="slds-p-top_small slds-p-left_xx-large" style="width: fit-content;">
                 

@@ -1,79 +1,77 @@
 <template>
-        <lightning-card class="slds-card_boundary" draggable={isDragable}>
-            <div slot="title">
-                <template if:true={node.nodeId}>
-                    עריכת צומת
-                </template>
-                <template if:false={node.nodeId}>
-                    הוספת צומת חדש
-                </template>
-            </div>
-            <div style="min-width:70em" class="slds-p-horizontal_small">
-                <div class="slds-grid slds-gutters">
-                    <div class="slds-col">
-                        <c-auto-complete-select name="Select Content" label="תוכן" values={options}
-                            selected-item={node.label} onselected={handleSelection} data-event="contentselected" oncancel={cancelHandler}
-                            onenter={enterHandler}></c-auto-complete-select>
-                    </div>
-                    <div class="slds-col">
-                        <lightning-icon class="slds-p-top_x-large" aria-hidden="true" data-type="content"
-                            onclick={refreshOptions} size="x-small" icon-name="utility:refresh">
-                        </lightning-icon>
-                    </div>
+    <lightning-card class="slds-card_boundary" draggable={isDragable}>
+        <div slot="title">
+            <template if:true={node.nodeId}>
+                עריכת צומת
+            </template>
+            <template if:false={node.nodeId}>
+                הוספת צומת חדש
+            </template>
+        </div>
+        <div class="slds-p-horizontal_small body-width">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    <c-auto-complete-select name={selectedContent.name} label={selectedContent.label}
+                        values={selectedContent.values} selected-item={node.label} onselected={handleSelection}
+                        data-event={selectedContent.dataEvent} oncancel={cancelHandler} onenter={enterHandler}>
+                    </c-auto-complete-select>
                 </div>
-                <lightning-input class="slds-p-around_small" type="toggle" label="שמור והצג את התיאור מתוך הצומת"  checked={overrideContent} onchange={handleOverride} name="input1"></lightning-input>
-                <lightning-layout class="slds-p-around_small">
-                    <lightning-layout-item padding="horizontal-samll">
-                    </lightning-layout-item>
-                    <lightning-layout-item>
-                        <form class="radioForm">
-                            <lightning-radio-group name="radioGroup" label="צור תיאור מתוך"
-                            options={sourceOptions} value={radioGroupValue} required onchange={handleChange}
-                            type="button" message-when-value-missing={radioButtonMissing}></lightning-radio-group>
-                        </form>
-                    </lightning-layout-item>
-                        
-                </lightning-layout>
-                <template if:true={radioGroupValue}>
-                    <template if:true={fromArticle}>
-                        <div class="slds-grid slds-gutters">
-                            <div class="slds-col">
-                                <c-auto-complete-select icon-name="utility:account" label="מאמר"
-                                    name="Select Article" values={articles}
-                                    onselected={handleSelection} data-event="articleselected"
-                                    selected-item={selectedArticle.selectedValue}></c-auto-complete-select>
-                            </div>
-                            <div class="slds-col">
-                                <lightning-icon class="slds-p-top_x-large" aria-hidden="true"
-                                    data-type="article" onclick={refreshOptions} size="x-small"
-                                    icon-name="utility:refresh"></lightning-icon>
-                            </div>
+                <div class="slds-col">
+                    <lightning-icon class="slds-p-top_x-large" aria-hidden="true" data-type="content"
+                        onclick={refreshOptions} size="x-small" icon-name="utility:refresh">
+                    </lightning-icon>
+                </div>
+            </div>
+            <lightning-input class="slds-p-around_small" type="toggle" label="שמור והצג את התיאור מתוך הצומת"
+                checked={overrideContent} onchange={handleOverride} name="input1"></lightning-input>
+            <lightning-layout class="slds-p-around_small">
+                <lightning-layout-item padding="horizontal-samll">
+                </lightning-layout-item>
+                <lightning-layout-item>
+                    <form class="radioForm">
+                        <lightning-radio-group name="radioGroup" label="צור תיאור מתוך" options={sourceOptions}
+                            value={radioGroupValue} onchange={handleChange} type="button"></lightning-radio-group>
+                    </form>
+                </lightning-layout-item>
+
+            </lightning-layout>
+            <template if:true={radioGroupValue}>
+                <template if:true={isArticleSource}>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <c-auto-complete-select name={selectedArticle.name} label={selectedArticle.label}
+                            values={selectedArticle.values} selected-item={selectedArticle.selectedValue} onselected={handleSelection}
+                            data-event={selectedArticle.dataEvent} oncancel={cancelHandler} onenter={enterHandler}>
+                        </c-auto-complete-select>
                         </div>
-                        <template if:true={node.articleHtml}>
-                            <label
-                                class="slds-text-align_center slds-text-body_regular slds-p-around_small">
-                                <h1>תצוגה מקדימה</h1>
-                            </label>
-                            <lightning-formatted-rich-text title="תצוגה מקדימה של מאמר"
-                                value={node.articleHtml}>
+                        <div class="slds-col">
+                            <lightning-icon class="slds-p-top_x-large" aria-hidden="true" data-type="article"
+                                onclick={refreshOptions} size="x-small" icon-name="utility:refresh"></lightning-icon>
+                        </div>
+                    </div>
+                    <template if:true={node.articleHtml}>
+                        <label class="slds-text-align_center slds-text-body_regular slds-p-around_small">
+                            <h1>{labels.Preview}</h1>
+                        </label>
+                        <lightning-formatted-rich-text title="תצוגה מקדימה של מאמר" value={node.articleHtml}>
 
-                            </lightning-formatted-rich-text>
+                        </lightning-formatted-rich-text>
 
-                        </template>
-                    </template>
-                    <template if:false={fromArticle}>
-                        <lightning-input-rich-text style="cursor: text;" draggable="false" value={node.richText} formats={formats}
-                            class="rich-text-value" placeholder="הזן טקסט"></lightning-input-rich-text>
                     </template>
                 </template>
+                <template if:false={isArticleSource}>
+                    <lightning-input-rich-text style="cursor: text;" draggable="false" value={node.richText}
+                        formats={formats} class="rich-text-value" placeholder="הזן טקסט"></lightning-input-rich-text>
+                </template>
+            </template>
+        </div>
+        <div slot="footer">
+            <div style="text-align: center;">
+                <lightning-icon aria-hidden="true" onclick={setNewNode} class="slds-m-right_small" size="small"
+                    icon-name="utility:check" variant="success"></lightning-icon>
+                <lightning-icon aria-hidden="true" onclick={cancelHandler} class="slds-m-right_small" size="small"
+                    icon-name="utility:close" variant="error"></lightning-icon>
             </div>
-            <div slot="footer">
-                <div style="text-align: center;">
-                    <lightning-icon aria-hidden="true" onclick={setNewNode} class="slds-m-right_small"
-                        size="small" icon-name="utility:check" variant="success"></lightning-icon>
-                    <lightning-icon aria-hidden="true" onclick={cancelHandler} class="slds-m-right_small"
-                        size="small" icon-name="utility:close" variant="error"></lightning-icon>
-                </div>
-            </div>
-        </lightning-card>
+        </div>
+    </lightning-card>
 </template>

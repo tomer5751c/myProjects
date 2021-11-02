@@ -3,13 +3,10 @@
         <lightning-spinner if:true={loading}></lightning-spinner>
         <div class="slds-p-around_medium">
             <h1>Call Script Tree</h1>
-            <!-- <c-platform-event-test></c-platform-event-test> -->
             <div class="slds-grid slds-gutters">
             <lightning-combobox variant="label-hidden" class="slds-col slds-size_1-of-3 slds-p-around_medium" options={treesOptions}
                 placeholder="בחר עץ שיחה" onchange={selectTree}></lightning-combobox>
             <lightning-input type="search" variant="label-hidden" placeholder="חפש לפי מילות מפתח" onchange={searchNodes} class="slds-col slds-size_1-of-3 slds-p-around_medium"></lightning-input>
-            <!-- <lightning-button-icon class=" slds-p-around_medium" disabled={noSelectedTree} variant="brand" size="medium" icon-name="utility:expand_all" onclick={expandAll} ></lightning-button-icon>
-            <lightning-button-icon class="slds-p-around_medium" disabled={noSelectedTree} variant="brand" size="medium"  icon-name="utility:collapse_all"  onclick={collapseAll}></lightning-button-icon> -->
         </div>
             <div if:true={selectedTree} class="slds-tree_container" style="max-width: 100%;">
                 <h4 class="slds-tree__group-header" id="treeheading"></h4>

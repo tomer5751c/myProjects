@@ -11,7 +11,7 @@ export default class TreeNodeItem extends LightningElement {
     @track fromArticle;
     @track radioGroupValue;
     @track overrideContent;
-    @track closeDescrption=false;
+    @track closeDescrption = false;
     @track isArticleSource;
     isShown
     selectedContent = { selectedValue: '' };
@@ -45,12 +45,12 @@ export default class TreeNodeItem extends LightningElement {
             this.articles = JSON.parse(JSON.stringify(value));
         }
     }
-    connectedCallback(){
+    connectedCallback() {
         this.overrideContent = this.node.isContentOverride;
         this.radioGroupValue = this.node.source?.toLowerCase();
-        this.isArticleSource = this.node.source?.toLowerCase() =='article';
+        this.isArticleSource = this.node.source?.toLowerCase() == 'article';
     }
-    handleOverride(event){
+    handleOverride(event) {
         this.overrideContent = event.target.checked;
     }
     handleChange(event) {
@@ -59,17 +59,17 @@ export default class TreeNodeItem extends LightningElement {
         this.radioGroupValue = selectedOption;
         this.radioButtonMissing = undefined;
     }
-    openCloseDescrption(event){
-        this.closeDescrption =! this.closeDescrption;
+    openCloseDescrption(event) {
+        this.closeDescrption = !this.closeDescrption;
         event.stopPropagation();
     }
     dragOver(ev) {
         let offset = this.oldY - ev.pageY;
         if (offset < -10) {
-            window.scrollBy(0,50);
+            window.scrollBy(0, 50);
         }
         if (offset > 10) {
-            window.scrollBy(0,-50);
+            window.scrollBy(0, -50);
             // window.scrollBy({ top: -100, behavior: 'smooth' });
         }
         console.log(this.oldY - ev.pageY);
@@ -137,16 +137,16 @@ export default class TreeNodeItem extends LightningElement {
     }
     renderedCallback() {
         Promise.all([loadStyle(this, SAMPLE_CSS)]);
-    
+
         if (this.node.new && !this.isNotFocus) {
             const input = this.template.querySelector('c-auto-complete-select');
             if (input) {
                 input.focusInput();
                 this.isNotFocus = true;
             }
-            if(this.node.articleId){
+            if (this.node.articleId) {
 
-                this.selectedArticle.selectedValue = this.articles.find(v=>v.value ===this.node.articleId)?.label;
+                this.selectedArticle.selectedValue = this.articles.find(v => v.value === this.node.articleId)?.label;
             }
         }
         if (this.node) {
@@ -161,10 +161,10 @@ export default class TreeNodeItem extends LightningElement {
                 this.isNewSearch = false;
             }
         }
-        if(!this.node.new){
+        if (!this.node.new) {
             this.overrideContent = this.node.isContentOverride;
             this.radioGroupValue = this.node.source?.toLowerCase();
-            this.isArticleSource = this.node.source?.toLowerCase() =='article';
+            this.isArticleSource = this.node.source?.toLowerCase() == 'article';
         }
     }
     setName(event) {
@@ -200,13 +200,13 @@ export default class TreeNodeItem extends LightningElement {
         this.orderEvent(1);
         event.stopPropagation();
     }
-    openRecord(e){
-        if(e.which === 2 ){
+    openRecord(e) {
+        if (e.which === 2) {
             window.open(`${location.origin}/lightning/r/Decision__c/${this.node.nodeId}/view`, '_blank').focus();
             e.stopPropagation();
             return false;
         }
-        
+
     }
     orderEvent(dir) {
         const orderEvent = new CustomEvent('orderevent', {
@@ -237,37 +237,40 @@ export default class TreeNodeItem extends LightningElement {
     }
     setNewNode(event) {
         let copy = this.copyNode(this.node);
-        // if (!this.radioGroupValue) {
-        //     const radio = this.template.querySelector('lightning-radio-group');
-        //     if (radio) {
-        //         this.radioButtonMissing = 'בחר מקור לתיאור';
-        //         radio.reportValidity();
-        //     }
-        //     return;
+        // const inputValue = this.template.querySelector('c-auto-complete-select');
+        // let value;
+        // if (inputValue) {
+        //     value = inputValue.selectedItem;
         // }
-        const inputValue = this.template.querySelector('c-auto-complete-select');
-        let value;
-        if (inputValue) {
-            value = inputValue.selectedItem;
-        }
-        const richText = this.template.querySelector('.rich-text-value');
-        if (richText && this.node) {
-                copy.richText = richText.value;
-            }
-            copy.isContentOverride =this.overrideContent;
-           
-            // copy.richText =event.detail.richText;
-            // copy.isContentOverride=event.detail.isContentOverride;
-            this.node = copy;
-            const editNode = new CustomEvent('editnode', {
+        // const richText = this.template.querySelector('.rich-text-value');
+        // if (richText && this.node) {
+        //     copy.richText = richText.value;
+        // }
+        // copy.isContentOverride = this.overrideContent;
+
+        copy.richText =event.detail.richText;
+        copy.isContentOverride=event.detail.isContentOverride;
+        this.node = copy;
+        // const editNode = new CustomEvent('editnode', {
+        //     detail: {
+        //         node: this.node,
+        //         label: value ? value : this.node.label,
+        //         source: this.radioGroupValue
+        //     },
+        //     bubbles: true,
+        //     composed: true
+        // });
+
+         const editNode = new CustomEvent('editnode', {
             detail: {
                 node: this.node,
-                label: value ? value :this.node.label,
-                source : this.radioGroupValue
+                label: event.detail.label,
+                source: event.detail.source
             },
             bubbles: true,
             composed: true
         });
+        
         this.dispatchEvent(editNode);
         event.stopPropagation();
     }
@@ -317,12 +320,12 @@ export default class TreeNodeItem extends LightningElement {
         this.options.forEach(val => {
             if (val.value == event.detail.key) {
                 val.isSelected = true;
-                if(val.articleId){
+                if (val.articleId) {
                     copy.articleHtml = this.articles.find(v => v.value == event.detail.key)?.info;
                     copy.articleId = this.articles.find(v => v.value == event.detail.key)?.value;
                 }
-                if(val.description){
-                    copy.richText =val.description;
+                if (val.description) {
+                    copy.richText = val.description;
                 }
             } else {
                 val.isSelected = false;
@@ -335,10 +338,10 @@ export default class TreeNodeItem extends LightningElement {
     get isDragable() {
         return this.node.parentId !== undefined && this.node.parentId !== null && !this.node.new;
     }
-    get hasDescrption(){
-        return this.node.articleHtml?.length >0 || this.node.richText?.length>0;
+    get hasDescrption() {
+        return this.node.articleHtml?.length > 0 || this.node.richText?.length > 0;
     }
-    get isItems(){
+    get isItems() {
         this.node.items !== undefined
     }
 }
