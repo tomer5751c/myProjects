@@ -2,10 +2,10 @@
     <lightning-card class="slds-card_boundary" draggable={isDragable}>
         <div slot="title">
             <template if:true={node.nodeId}>
-                עריכת צומת
+                {labels.editNode}
             </template>
             <template if:false={node.nodeId}>
-                הוספת צומת חדש
+                {labels.addNode}
             </template>
         </div>
         <div class="slds-p-horizontal_small body-width">
@@ -13,7 +13,7 @@
                 <div class="slds-col">
                     <c-auto-complete-select name={selectedContent.name} label={selectedContent.label}
                         values={selectedContent.values} selected-item={node.label} onselected={handleSelection}
-                        data-event={selectedContent.dataEvent} oncancel={cancelHandler} onenter={enterHandler}>
+                        data-event={selectedContent.dataEvent}>
                     </c-auto-complete-select>
                 </div>
                 <div class="slds-col">
@@ -22,14 +22,14 @@
                     </lightning-icon>
                 </div>
             </div>
-            <lightning-input class="slds-p-around_small" type="toggle" label="שמור והצג את התיאור מתוך הצומת"
+            <lightning-input class="slds-p-around_small" type="toggle" label ={labels.sourceToogle}
                 checked={overrideContent} onchange={handleOverride} name="input1"></lightning-input>
             <lightning-layout class="slds-p-around_small">
                 <lightning-layout-item padding="horizontal-samll">
                 </lightning-layout-item>
                 <lightning-layout-item>
                     <form class="radioForm">
-                        <lightning-radio-group name="radioGroup" label="צור תיאור מתוך" options={sourceOptions}
+                        <lightning-radio-group name="radioGroup" label={labels.chooseDescription} options={sourceOptions}
                             value={radioGroupValue} onchange={handleChange} type="button"></lightning-radio-group>
                     </form>
                 </lightning-layout-item>
@@ -41,7 +41,7 @@
                         <div class="slds-col">
                             <c-auto-complete-select name={selectedArticle.name} label={selectedArticle.label}
                             values={selectedArticle.values} selected-item={selectedArticle.selectedValue} onselected={handleSelection}
-                            data-event={selectedArticle.dataEvent} oncancel={cancelHandler} onenter={enterHandler}>
+                            data-event={selectedArticle.dataEvent}>
                         </c-auto-complete-select>
                         </div>
                         <div class="slds-col">
@@ -53,7 +53,7 @@
                         <label class="slds-text-align_center slds-text-body_regular slds-p-around_small">
                             <h1>{labels.Preview}</h1>
                         </label>
-                        <lightning-formatted-rich-text title="תצוגה מקדימה של מאמר" value={node.articleHtml}>
+                        <lightning-formatted-rich-text title={labels.articlePreview} value={node.articleHtml}>
 
                         </lightning-formatted-rich-text>
 
@@ -61,7 +61,7 @@
                 </template>
                 <template if:false={isArticleSource}>
                     <lightning-input-rich-text style="cursor: text;" draggable="false" value={node.richText}
-                        formats={formats} class="rich-text-value" placeholder="הזן טקסט"></lightning-input-rich-text>
+                        formats={formats} class="rich-text-value" placeholder={labels.enterText}></lightning-input-rich-text>
                 </template>
             </template>
         </div>

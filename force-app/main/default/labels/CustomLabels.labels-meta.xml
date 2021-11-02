@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Preview</fullName>
+        <categories>editor</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Preview</shortDescription>
+        <value>Preview</value>
+    </labels>
+    <labels>
+        <fullName>EditNode</fullName>
+        <categories>editor</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>EditNode</shortDescription>
+        <value>Edit Node</value>
+    </labels>
+    <labels>
+        <fullName>AddNode</fullName>
+        <categories>editor</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Create a new Node</shortDescription>
+        <value>Add New Node</value>
+    </labels>
+    <labels>
+        <fullName>SourceToogle</fullName>
+        <categories>editor</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save and display the description from the node</shortDescription>
+        <value>Save and display the description from the node</value>
+    </labels>
+    <labels>
+        <fullName>RadioChooseDescription</fullName>
+        <categories>editor</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Create a description from</shortDescription>
+        <value>Create a description from</value>
+    </labels>
+    <labels>
+        <fullName>ArticlePreview</fullName>
+        <categories>editor</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Preview of an article</shortDescription>
+        <value>Preview of an article</value>
+    </labels>
+    <labels>
+        <fullName>EnterText</fullName>
+        <categories>editor</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Enter Text</shortDescription>
+        <value>Enter Text Here</value>
+    </labels>
+</CustomLabels>

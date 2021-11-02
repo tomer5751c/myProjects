@@ -30,6 +30,7 @@ export default class AutoCompleteSelect extends LightningElement {
         return this.allValues;
     }
     set values(values) {
+        debugger
         this.allValues = values;
         this.filteredValues = this.values;
     }
@@ -182,7 +183,6 @@ export default class AutoCompleteSelect extends LightningElement {
         this.dispatchEvent(eventToDispatch);
     }
     selectOption(event) {
-        debugger
         event.preventDefault();
         this.selectedItemName = event.detail.value;
         this.selectedItemValue = event.detail.value;
