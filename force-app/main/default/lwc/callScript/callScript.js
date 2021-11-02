@@ -107,24 +107,26 @@ export default class CallScript extends LightningElement {
         this.setDecisionsTree();
     }
 
-    createContent(contentLabel,description,article,isContentOverride) {
+    createContent(contentLabel,description,article,isContentOverride,source) {
         const fields = {};
         fields[contentFields.LABEL_FIELD.fieldApiName] = contentLabel;
         if(!isContentOverride){
             fields[contentFields.DESCRIPTION_FIELD.fieldApiName] = description;
             fields[contentFields.CONTENTARTICLEID_FIELD.fieldApiName] = article;
+            fields[contentFields.CONTENT_SOURCE_FIELD.fieldApiName] = source;
         }
 
         const recordInput = { apiName: CONTENT_OBJECT.objectApiName, fields };
         return createRecord(recordInput);
 
     }
-    createDecision(body, parentId, contentId, lastItem,articleId,isContentOverride) {
+    createDecision(body, parentId, contentId, lastItem,articleId,isContentOverride,source) {
         const fields = {};
         this.loading = true;
         fields[decisionFields.TREEID_FIELD.fieldApiName] = this.selectedTree;
         fields[decisionFields.PARENT_DECISION_FIELD.fieldApiName] = parentId;
         fields[decisionFields.CONTENT_FIELD.fieldApiName] = contentId;
+        fields[decisionFields.SOURCE_FIELD.fieldApiName] = source;
         if(isContentOverride){
             fields[decisionFields.RICHTEXT_FIELD.fieldApiName] = body;
             if(articleId){
@@ -263,7 +265,7 @@ export default class CallScript extends LightningElement {
         }
         return res;
     }
-    checkDuplication(label,description,article,isContentOverride) {
+    checkDuplication(label,description,article,isContentOverride,source) {
         let options = this.contentsOptions.filter(v => v.label === label);
         const fields={};
         return new Promise((resolve, reject) => {
@@ -276,6 +278,7 @@ export default class CallScript extends LightningElement {
                 }
                 if(Object.keys(fields).length >0){
                     fields[contentFields.CONTENTID.fieldApiName] = options[0].value;
+                    fields[contentFields.CONTENT_SOURCE_FIELD.fieldApiName] = source;
                     if(!isContentOverride){
                         this.updateContent(fields); 
                     }
@@ -284,7 +287,7 @@ export default class CallScript extends LightningElement {
             }
             else {
                 this.loading = true;
-                this.createContent(label,description,article,isContentOverride).then(res => {
+                this.createContent(label,description,article,isContentOverride,source).then(res => {
                     console.log(res);
                     this.setContents();
                     this.loading = false;
@@ -311,11 +314,12 @@ export default class CallScript extends LightningElement {
     editNodeEvent(event) {
         const n = event.detail.node;
         const label = event.detail.label;
+        const source =event.detail.source;
         const fields = {};
 
-        this.checkDuplication(label,n.richText,n.articleId,n.isContentOverride).then(id => {
+        this.checkDuplication(label,n.richText,n.articleId,n.isContentOverride,source).then(id => {
             if (!n.nodeId) {
-                this.createDecision(n.richText ? n.richText :label, n.parentId, id, n.lastItem,n.articleId,n.isContentOverride);
+                this.createDecision(n.richText ? n.richText :label, n.parentId, id, n.lastItem,n.articleId,n.isContentOverride,source);
             }
             else {
                 if(n.isContentOverride){
@@ -327,6 +331,7 @@ export default class CallScript extends LightningElement {
                 fields[decisionFields.DECISIONID_FIELD.fieldApiName] = n.nodeId;
                 fields[decisionFields.OVERRIDE_CONTENT_FIELD.fieldApiName] = n.isContentOverride;
                 fields[decisionFields.CONTENT_FIELD.fieldApiName] = id;
+                fields[decisionFields.SOURCE_FIELD.fieldApiName] = source;
                 this.updateDecision(fields);
             }
         }).catch(err => {
@@ -340,11 +345,16 @@ export default class CallScript extends LightningElement {
             if (nodes) {
                 console.log(nodes);
                 this.items = [nodes];
-                this.addLevel(this.items[0], 1);
-                this.root = this.items[0];
-                this.root.isFirst = this.root.isLast = true;
+                if(this.items?.length >0){
+                    this.addLevel(this.items[0], 1);
+                    this.root = this.items[0];
+                    this.root.isFirst = this.root.isLast = true;
+                    this.loading = false;
+                }
+            }else{
+                this.loading = false;
             }
-            this.loading = false;
+            
 
         }).catch(err => {
             console.log(err);
@@ -457,5 +467,7 @@ export default class CallScript extends LightningElement {
         });
         this.dispatchEvent(evt);
     }
-
+    get isNotEmpty(){
+        return this.root && Object.keys(this.root) ?.length !==0 ;
+    }
 }

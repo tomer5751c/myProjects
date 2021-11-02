@@ -12,6 +12,7 @@ export default class TreeNodeItem extends LightningElement {
     @track radioGroupValue;
     @track overrideContent;
     @track closeDescrption=false;
+    @track isArticleSource;
     isShown
     selectedContent = { selectedValue: '' };
     selectedArticle = { selectedValue: '' };
@@ -46,13 +47,15 @@ export default class TreeNodeItem extends LightningElement {
     }
     connectedCallback(){
         this.overrideContent = this.node.isContentOverride;
+        this.radioGroupValue = this.node.source?.toLowerCase();
+        this.isArticleSource = this.node.source?.toLowerCase() =='article';
     }
     handleOverride(event){
         this.overrideContent = event.target.checked;
     }
     handleChange(event) {
         const selectedOption = event.detail.value;
-        this.fromArticle = selectedOption === 'article';
+        this.isArticleSource = selectedOption === 'article';
         this.radioGroupValue = selectedOption;
         this.radioButtonMissing = undefined;
     }
@@ -133,11 +136,8 @@ export default class TreeNodeItem extends LightningElement {
         return !this.isNotLeaf;
     }
     renderedCallback() {
-        const div = this.template.querySelector('.divBorder');
         Promise.all([loadStyle(this, SAMPLE_CSS)]);
-        if (div) {
-            div.innerHTML = this.htmlStr;
-        }
+    
         if (this.node.new && !this.isNotFocus) {
             const input = this.template.querySelector('c-auto-complete-select');
             if (input) {
@@ -160,6 +160,11 @@ export default class TreeNodeItem extends LightningElement {
                 // this.node=copy;
                 this.isNewSearch = false;
             }
+        }
+        if(!this.node.new){
+            this.overrideContent = this.node.isContentOverride;
+            this.radioGroupValue = this.node.source?.toLowerCase();
+            this.isArticleSource = this.node.source?.toLowerCase() =='article';
         }
     }
     setName(event) {
@@ -231,6 +236,7 @@ export default class TreeNodeItem extends LightningElement {
         this.dispatchEvent(refreshOptions);
     }
     setNewNode(event) {
+        let copy = this.copyNode(this.node);
         // if (!this.radioGroupValue) {
         //     const radio = this.template.querySelector('lightning-radio-group');
         //     if (radio) {
@@ -239,24 +245,25 @@ export default class TreeNodeItem extends LightningElement {
         //     }
         //     return;
         // }
-        // const inputValue = this.template.querySelector('c-auto-complete-select');
-        // let value;
-        // if (inputValue) {
-        //     value = inputValue.selectedItem;
-        // }
-        // const richText = this.template.querySelector('.rich-text-value');
-        // if (richText && this.node) {
-            //     copy.richText = richText.value;
-            // }
-            // copy.isContentOverride =this.overrideContent;
-            let copy = this.copyNode(this.node);
-            copy.richText =event.detail.richText;
-            copy.isContentOverride=event.detail.isContentOverride;
+        const inputValue = this.template.querySelector('c-auto-complete-select');
+        let value;
+        if (inputValue) {
+            value = inputValue.selectedItem;
+        }
+        const richText = this.template.querySelector('.rich-text-value');
+        if (richText && this.node) {
+                copy.richText = richText.value;
+            }
+            copy.isContentOverride =this.overrideContent;
+           
+            // copy.richText =event.detail.richText;
+            // copy.isContentOverride=event.detail.isContentOverride;
             this.node = copy;
             const editNode = new CustomEvent('editnode', {
             detail: {
                 node: this.node,
-                label: event.detail.label
+                label: value ? value :this.node.label,
+                source : this.radioGroupValue
             },
             bubbles: true,
             composed: true
@@ -330,5 +337,8 @@ export default class TreeNodeItem extends LightningElement {
     }
     get hasDescrption(){
         return this.node.articleHtml?.length >0 || this.node.richText?.length>0;
+    }
+    get isItems(){
+        this.node.items !== undefined
     }
 }

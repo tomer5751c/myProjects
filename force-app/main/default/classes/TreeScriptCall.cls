@@ -48,7 +48,7 @@ public with sharing class TreeScriptCall{
 	//get all contents options
 	@AuraEnabled
 	public static List<Content__c> getContents(){
-		return [SELECT Id,Name, Description__c, Label__c,ArticleId__c
+		return [SELECT Id,Name, Description__c, Label__c,ArticleId__c,Source__c
 		        FROM Content__c];
 	}
 
@@ -56,9 +56,9 @@ public with sharing class TreeScriptCall{
 	@AuraEnabled
 	public static TreeNode getDecisions(Id treeId){
 		Map<id, List<id>> decisionMap = new Map<Id, List<Id>>();
-		Map<id, Content__c> contents = new Map<id, Content__c>([SELECT Id, Description__c, Label__c, ArticleId__c, Name
+		Map<id, Content__c> contents = new Map<id, Content__c>([SELECT Id, Description__c, Label__c, ArticleId__c, Name,Source__c
 		                                                        FROM Content__c]);
-		Map<id, Decision__c> decisions = new Map<Id, Decision__c>([SELECT id, Name, parentDecision__c, Content__r.Description__c, Content__r.articleId__c, articleId__c, order__c, richText__c,Override_Content__c
+		Map<id, Decision__c> decisions = new Map<Id, Decision__c>([SELECT id, Name, parentDecision__c, Content__r.Description__c, Content__r.articleId__c, articleId__c, order__c, richText__c,Override_Content__c,Source__c
 		                                                           FROM Decision__c
 		                                                           WHERE TreeDecisions__c = :treeId]);
 		Id rootId;
@@ -148,6 +148,9 @@ public with sharing class TreeScriptCall{
 		@AuraEnabled
 		public Boolean isContentOverride{ get; set; }
 
+		@AuraEnabled
+		public String source{ get; set; }
+
 		public TreeNode(){
 		}
 
@@ -160,12 +163,14 @@ public with sharing class TreeScriptCall{
 				if (contents.containsKey(d.Content__c)){
 					label = contents.get(d.Content__c).Label__c;
 					if(d.Override_Content__c){
-						articleId = d.articleId__c;
+						 articleId = d.articleId__c;
 						 richText =d.richText__c;
+						 source =d.Source__c;
 					}
 					else{
 						articleId = contents.get(d.Content__c).ArticleId__c;
-						richText = contents.get(d.Content__c).Description__c;
+						richText =  contents.get(d.Content__c).Description__c;
+						source   =    contents.get(d.Content__c).Source__c;
 					}
 				}
 			}

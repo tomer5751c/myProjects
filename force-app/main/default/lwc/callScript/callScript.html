@@ -8,17 +8,21 @@
             <lightning-combobox variant="label-hidden" class="slds-col slds-size_1-of-3 slds-p-around_medium" options={treesOptions}
                 placeholder="בחר עץ שיחה" onchange={selectTree}></lightning-combobox>
             <lightning-input type="search" variant="label-hidden" placeholder="חפש לפי מילות מפתח" onchange={searchNodes} class="slds-col slds-size_1-of-3 slds-p-around_medium"></lightning-input>
-            <lightning-button-icon class=" slds-p-around_medium" disabled={noSelectedTree} variant="brand" size="medium" icon-name="utility:expand_all" onclick={expandAll} ></lightning-button-icon>
-            <lightning-button-icon class="slds-p-around_medium" disabled={noSelectedTree} variant="brand" size="medium"  icon-name="utility:collapse_all"  onclick={collapseAll}></lightning-button-icon>
+            <!-- <lightning-button-icon class=" slds-p-around_medium" disabled={noSelectedTree} variant="brand" size="medium" icon-name="utility:expand_all" onclick={expandAll} ></lightning-button-icon>
+            <lightning-button-icon class="slds-p-around_medium" disabled={noSelectedTree} variant="brand" size="medium"  icon-name="utility:collapse_all"  onclick={collapseAll}></lightning-button-icon> -->
         </div>
             <div if:true={selectedTree} class="slds-tree_container" style="max-width: 100%;">
                 <h4 class="slds-tree__group-header" id="treeheading"></h4>
-                <ul aria-labelledby="treeheading" class="slds-tree" role="tree">
+                
+                <ul if:true={isNotEmpty} aria-labelledby="treeheading" class="slds-tree" role="tree">
                     <c-tree-node-item  onrefreshoptions={refreshOptions} new-search={newSearch} has-permission= {adminPermission} contents-options={contentsOptions} articles-options={articlesOptions} node={root} html-str={htmlStr}
                         onorderevent={changeOrder} oneditnode={editNodeEvent} onupdateparent={editParentEvent}
                         onaddnode={addNodeEvent} onremovenode={removeNodesEvent}>
                     </c-tree-node-item>
                 </ul>
+                <template if:false={isNotEmpty}>
+                    <h1>לא נמצא תסריט שיחה מתאים</h1>
+                </template>
             </div>
         </div>
     </lightning-card>

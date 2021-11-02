@@ -19,7 +19,7 @@
                             </template>
                         </lightning-layout-item>
                         <!-- label -->
-                        <lightning-layout-item>
+                        <lightning-layout-item style="width:18em">
                             <span ondblclick={editNode} onmousedown={openRecord} class="slds-has-flexi-truncate">
                                 <span if:true={node.markable} class="slds-tree__item-label slds-truncate mark-search"
                                     title="Tree Branch">{node.label}</span>
@@ -45,14 +45,14 @@
                         </lightning-layout-item> -->
                         <lightning-layout-item class="slds-p-top_small slds-p-left_medium" size="12">
                             <div class="slds-grid slds-gutters">
-                                <div class="slds-col slds-size_11-of-12" if:false={closeDescrption}>
-                                    <template if:true={node.articleHtml}>
+                                <div class="slds-col slds-size_11-of-12" style="width:fit-content;" if:false={closeDescrption}>
+                                    <template if:true={isArticleSource}>
                                         <div class="slds-p-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
                                             <lightning-formatted-rich-text  value={node.articleHtml}>
                                             </lightning-formatted-rich-text>
                                         </div>
                                     </template>
-                                    <template if:false={node.articleHtml}>
+                                    <template if:false={isArticleSource}>
                                         <template if:true={node.richText}>
                                             <div class="slds-p-around_small slds-border_top slds-border_right slds-border_bottom slds-border_left">
                                                 <lightning-formatted-rich-text  value={node.richText}>
@@ -79,7 +79,7 @@
                     </lightning-layout>
                     
                 </template>
-                <!-- <template if:true={node.new}>
+                <template if:true={node.new}>
                     <lightning-card class="slds-card_boundary" draggable={isDragable}>
                         <div slot="title">
                             <template if:true={node.nodeId}>
@@ -116,7 +116,7 @@
                                     
                             </lightning-layout>
                             <template if:true={radioGroupValue}>
-                                <template if:true={fromArticle}>
+                                <template if:true={isArticleSource}>
                                     <div class="slds-grid slds-gutters">
                                         <div class="slds-col">
                                             <c-auto-complete-select icon-name="utility:account" label="מאמר"
@@ -142,7 +142,7 @@
 
                                     </template>
                                 </template>
-                                <template if:false={fromArticle}>
+                                <template if:false={isArticleSource}>
                                     <lightning-input-rich-text style="cursor: text;" draggable="false" value={node.richText} formats={formats}
                                         class="rich-text-value" placeholder="הזן טקסט"></lightning-input-rich-text>
                                 </template>
@@ -157,11 +157,11 @@
                             </div>
                         </div>
                     </lightning-card>
-                </template> -->
-                <c-node-editor if:true={node.new} articles-options={articlesOptions} contents-options={contentsOptions} is-dragable={isDragable} node={node}
+                </template>
+                <!-- <c-node-editor if:true={node.new} articles-options={articlesOptions} contents-options={contentsOptions} is-dragable={isDragable} node={node}
                 onenterevent={enterHandler} oncancelevent={cancelHandler} onnewnodeevent={setNewNode}
                 oncontentselected ={handleSelection} onarticleselected={handleSelectionArticle}
-                ></c-node-editor>
+                ></c-node-editor> -->
             </div>
             <!-- <div class="slds-p-top_small slds-p-left_xx-large" style="width: fit-content;">
                 
