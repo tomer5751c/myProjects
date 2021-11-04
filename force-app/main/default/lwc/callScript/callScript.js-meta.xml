@@ -6,6 +6,10 @@
         <target>lightning__Tab</target>
                 <target>lightning__RecordPage</target>
                 <target>lightning__FlowScreen</target>
-
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__FlowScreen">
+            <property name="trees" type="String" label="trees" description="trees" />
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, track, wire,api } from 'lwc';
 import getDecisions from '@salesforce/apex/TreeScriptCall.getDecisions';
 import deleteNodes from '@salesforce/apex/TreeScriptCall.deleteNodes';
 import moveNodes from '@salesforce/apex/TreeScriptCall.moveNodes';
@@ -12,6 +12,14 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import hasPermission from '@salesforce/customPermission/testAdmin';
 export default class CallScript extends LightningElement {
 
+    @api get trees(){
+        return this._trees ? this._trees :[];
+    };
+    set trees(value){
+        if(typeof(value)=='string'){
+            this._trees = value.replace('[','').replace(']','').split(',');
+        }
+    }
     @track treesOptions = [];
     @track root = {};
     @track items = [];
@@ -28,7 +36,7 @@ export default class CallScript extends LightningElement {
     selectedBranch;
     adminPermission =hasPermission;
 
-    @wire(getTrees) trees({ data, error }) {
+    @wire(getTrees,{trees:'$trees'}) getTrees({ data, error }) {
         if (data) {
             let options = [];
             console.log(data);
@@ -341,6 +349,8 @@ export default class CallScript extends LightningElement {
 
     setDecisionsTree() {
         this.loading = true;
+        this.root ={};
+        this.items =[];
         getDecisions({ treeId: this.selectedTree }).then(nodes => {
             if (nodes) {
                 console.log(nodes);
@@ -362,9 +372,7 @@ export default class CallScript extends LightningElement {
         })
         this.setContents();
     }
-    getArticles(){
-        this.loading = true;
-        
+    getArticles= ()=>{
         getInfoArticles().then(res => {
             this.articlesOptions = res.map(v => {
                 var option = { label: v.UrlName, value: v.Id,info:v.info__c,isSelected:false };
@@ -376,27 +384,21 @@ export default class CallScript extends LightningElement {
                     this.articlesMap[art.value]=art;
                 }
             }
-            this.htmlStr =  this.articles[0].info;
-            this.loading = false;
         }).catch(err => {
             console.log(err);
-            this.loading = false;
         })
     }
     connectedCallback() {
-        this.getArticles();
+        this.loadingWrapper(this.getArticles);
     }
-    setContents() {
-        this.loading = true;
+    setContents =()=> {
         getContents().then(res => {
             this.contentsOptions = res.map(v => {
                 var option = { articleId:v.ArticleId__c,description:v.Descripton__c,label: v.Label__c, value: v.Id,name:v.Label__c,isSelected:false };
                 return option;
             })
-            this.loading=false;
         }).catch(ex => {
             console.log(ex);
-            this.loading = false;
         })
     }
     // expandAll(event){
@@ -423,10 +425,25 @@ export default class CallScript extends LightningElement {
             }
         }
     }
+    loadingWrapper(callback){
+        this.loading = true;
+        new Promise((reslove,reject)=>{
+            try{
+                callback();
+                reslove();
+            }catch{
+                reject();
+            };
+        }).then(v=>{
+            this.loading = false;
+        }).catch(er=>{
+            this.loading = false;
+        })
+    }
     refreshOptions(event){
         const type=event.detail.type;
         if(type=="article"){
-            this.getArticles();
+            this.loadingWrapper(this.getArticles);
         }
         else if(type=="content"){
             this.setContents();
