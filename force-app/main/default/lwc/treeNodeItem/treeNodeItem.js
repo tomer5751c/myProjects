@@ -11,7 +11,7 @@ export default class TreeNodeItem extends LightningElement {
     @track fromArticle;
     @track radioGroupValue;
     @track overrideContent;
-    @track closeDescrption = false;
+    @track closeDescrption = true;
     @track isArticleSource;
     isShown
     selectedContent = { selectedValue: '' };
