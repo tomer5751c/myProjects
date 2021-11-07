@@ -61,9 +61,11 @@
                                         </template>
                                     </template>
                                 </div>
-                                <div class="slds-col slds-size_11-of-12" if:true={closeDescrption}>
-                                    המאמר או התוכן מוסתר
-                                </div>
+                                <template if:true={hasDescrption}>
+                                    <div class="slds-col slds-size_5-of-12" if:true={closeDescrption}>
+                                        קיים תוכן להצגה
+                                    </div>
+                                </template>
                                 <div if:true={hasDescrption}>
                                     <div class="slds-col slds-size_1-of-12" if:false={closeDescrption}>
                                         <lightning-button-icon title="הסתר תוכן או מאמר" icon-name="utility:dash" size="x-small" onclick={openCloseDescrption}></lightning-button-icon>

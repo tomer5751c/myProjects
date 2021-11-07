@@ -12,10 +12,10 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import hasPermission from '@salesforce/customPermission/testAdmin';
 export default class CallScript extends LightningElement {
 
-    @api get trees(){
+    @api get treesIds(){
         return this._trees ? this._trees :[];
     };
-    set trees(value){
+    set treesIds(value){
         if(typeof(value)=='string'){
             this._trees = value.replace('[','').replace(']','').split(',');
         }
@@ -28,15 +28,15 @@ export default class CallScript extends LightningElement {
     @track removeChilds = false;
     @track optionalBranches;
     @track loading;
-    
+    onlyOneTree = false;
     mapping;
     mapId = {};
     index = 0;
     removedNode;
     selectedBranch;
     adminPermission =hasPermission;
-
-    @wire(getTrees,{trees:'$trees'}) getTrees({ data, error }) {
+    
+    @wire(getTrees,{treesIds:'$treesIds'}) getTrees({ data, error }) {
         if (data) {
             let options = [];
             console.log(data);
@@ -44,6 +44,9 @@ export default class CallScript extends LightningElement {
                 options.push({ label: elem.Name, value: elem.Id });
             });
             this.treesOptions = options;
+            if(this.onlyOneTree=(this.treesIds.length ===1)){
+                this.selectTree({detail:{value:this.treesIds[0]}})
+            }
         }
         if (error) {
             console.log(error);
@@ -349,8 +352,8 @@ export default class CallScript extends LightningElement {
 
     setDecisionsTree() {
         this.loading = true;
-        this.root ={};
-        this.items =[];
+        // this.root ={};
+        // this.items =[];
         getDecisions({ treeId: this.selectedTree }).then(nodes => {
             if (nodes) {
                 console.log(nodes);
@@ -375,7 +378,7 @@ export default class CallScript extends LightningElement {
     getArticles= ()=>{
         getInfoArticles().then(res => {
             this.articlesOptions = res.map(v => {
-                var option = { label: v.UrlName, value: v.Id,info:v.info__c,isSelected:false };
+                var option = { label: v.UrlName, value: v.UrlName,id:v.Id,info:v.info__c,isSelected:false };
                 return option;
             })
             this.articlesMap ={}

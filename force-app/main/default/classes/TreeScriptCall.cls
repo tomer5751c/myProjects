@@ -10,12 +10,13 @@ public with sharing class TreeScriptCall{
 
 	//get all tries types
 	@AuraEnabled(cacheable = true)
-	public static List<TreeDecisions__c> getTrees(List<String> trees){
+	public static List<TreeDecisions__c> getTrees(List<String> treesIds){
 		String queryString ='SELECT Id,Name FROM TreeDecisions__c ';
-		if(trees.size() > 0){
-			queryString += 'WHERE Name IN :trees';
+		if(treesIds.size() > 0){
+			queryString += 'WHERE Id IN :treesIds';
 		}
 		return Database.query(queryString);
+
 	}
 
 	// delete bulk of decisions nodes
@@ -144,7 +145,7 @@ public with sharing class TreeScriptCall{
 		public Id parentId{ get; set; }
 
 		@AuraEnabled
-		public Id articleId{ get; set; }
+		public String articleId{ get; set; }
 
 		@AuraEnabled
 		public Decimal order{ get; set; }

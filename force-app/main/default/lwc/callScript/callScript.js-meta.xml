@@ -9,7 +9,7 @@
     </targets>
     <targetConfigs>
         <targetConfig targets="lightning__FlowScreen">
-            <property name="trees" type="String" label="trees" description="trees" />
+            <property name="treesIds" type="String" label="Trees Ids" description="Trees Ids" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
