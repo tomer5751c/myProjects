@@ -5,8 +5,8 @@ export default class NodeEditor extends LightningElement {
     @api isDragable;
 
     @track overrideContent;
-    @track sourceOptions = [{ label: "בחירת מאמר", value: 'article' },
-    { value: 'text', label: "טקסט חופשי" }];
+    @track sourceOptions = [{ label: customLabels.ArticleSelection, value: 'article' },
+    { value: 'text', label: customLabels.FreeText }];
     @track radioGroupValue;
     @track isArticleSource;
 
@@ -27,8 +27,8 @@ export default class NodeEditor extends LightningElement {
         }
     }
 
-    selectedContent = { selectedValue: '', name: 'Select Content', label: 'תוכן', values: [], dataEvent: 'contentselected' };
-    selectedArticle = { iconName:"utility:account",selectedValue: '',name: 'Select Article', label: 'מאמר', values: [], dataEvent: 'articleselected'};
+    selectedContent = { selectedValue: '', name: 'Select Content', label: customLabels.Content, values: [], dataEvent: 'contentselected' };
+    selectedArticle = { iconName:"utility:account",selectedValue: '',name: 'Select Article', label:customLabels.Article, values: [], dataEvent: 'articleselected'};
     formats = ['font', 'size', 'bold', 'italic', 'underline',
         'strike', 'list', 'indent', 'align', 'link',
         'image', 'clean', 'table', 'header', 'color', 'background', 'direction'];
@@ -114,4 +114,5 @@ export default class NodeEditor extends LightningElement {
         this.sendEvent('newnodeevent', details)
         event.stopPropagation();
     }
+    
 }

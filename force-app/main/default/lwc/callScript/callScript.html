@@ -2,54 +2,71 @@
     <lightning-card variant="narrow">
         <lightning-spinner if:true={loading}></lightning-spinner>
         <div class="slds-p-around_medium">
-            <h1>Call Script Tree</h1>
-            <!-- <c-platform-event-test></c-platform-event-test> -->
+            <h1>{labels.treeTitle}</h1>
             <div class="slds-grid slds-gutters">
-            <lightning-combobox if:false={onlyOneTree} variant="label-hidden" class="slds-col slds-size_1-of-3 slds-p-around_medium" options={treesOptions}
-                placeholder="בחר עץ שיחה" onchange={selectTree}></lightning-combobox>
-            <lightning-input type="search" variant="label-hidden" placeholder="חפש לפי מילות מפתח" onchange={searchNodes} class="slds-col slds-size_1-of-3 slds-p-around_medium"></lightning-input>
-            <!-- <lightning-button-icon class=" slds-p-around_medium" disabled={noSelectedTree} variant="brand" size="medium" icon-name="utility:expand_all" onclick={expandAll} ></lightning-button-icon>
-            <lightning-button-icon class="slds-p-around_medium" disabled={noSelectedTree} variant="brand" size="medium"  icon-name="utility:collapse_all"  onclick={collapseAll}></lightning-button-icon> -->
-        </div>
+                <lightning-combobox if:false={onlyOneTree} variant="label-hidden"
+                    class="slds-col slds-size_1-of-3 slds-p-around_medium" options={treesOptions}
+                    placeholder={labels.chooseTree} onchange={selectTree}></lightning-combobox>
+                <lightning-input type="search" variant="label-hidden" placeholder={labels.searchByKeywords}
+                    onchange={searchNodes} class="slds-col slds-size_1-of-3 slds-p-around_medium"></lightning-input>
+            </div>
             <div if:true={selectedTree} class="slds-tree_container" style="max-width: 100%;">
                 <h4 class="slds-tree__group-header" id="treeheading"></h4>
-                
+
                 <ul if:true={isNotEmpty} aria-labelledby="treeheading" class="slds-tree" role="tree">
-                    <c-tree-node-item  onrefreshoptions={refreshOptions} new-search={newSearch} has-permission= {adminPermission} contents-options={contentsOptions} articles-options={articlesOptions} node={root} html-str={htmlStr}
-                        onorderevent={changeOrder} oneditnode={editNodeEvent} onupdateparent={editParentEvent}
-                        onaddnode={addNodeEvent} onremovenode={removeNodesEvent}>
+                    <c-tree-node-item onrefreshoptions={refreshOptions} new-search={newSearch}
+                        has-permission={adminPermission} contents-options={contentsOptions}
+                        articles-options={articlesOptions} node={root} html-str={htmlStr} onorderevent={changeOrder}
+                        oneditnode={editNodeEvent} onupdateparent={editParentEvent} onaddnode={addNodeEvent}
+                        onremovenode={removeNodesEvent}>
                     </c-tree-node-item>
                 </ul>
                 <template if:false={isNotEmpty}>
-                    <h1>לא נמצא תסריט שיחה מתאים</h1>
+                    <h1>{labels.noSuitableScript}</h1>
                 </template>
             </div>
         </div>
     </lightning-card>
+    <!-- <template if:true={showModal}>
+        <c-custom-modal title="מחיקת צומת" show-close-button="true" body-message="האם ברצונך למחוק את
+        הצומת הזה ?" show-footer="true" ok-option-label="מחק" cancel-option-label="ביטול" onokoption={deleteOptionClick} oncanceloption={cancelOptionClick}>
+    
+        <div if:true={removedNode.items.length}>
+            <lightning-input if:true={removedNode.items.length} class="slds-p-around_small"
+                onchange={removeAllChilds} checked={removeChilds} type="checkbox"
+                label="מחק גם את כל הצמתים שתחת ענף זה"></lightning-input>
+            <div if:false={removeChilds}
+                class="remove-tree-choice slds-text-body_medium slds-p-around_small">
+                בחר ענף אחר מהעץ אליו יועברו הצמתים שתחת הצומת שעתידה להמחק
+                <lightning-tree onselect={handleSelect} selected-item={selectedBranch} items={branches}>
+                </lightning-tree>
+            </div>
+        </div>
+    </c-custom-modal>
+    </template> -->
     <template if:true={showModal}>
         <div>
             <section style="height:100%;width:100%;" role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
                 <div class="slds-modal__container">
                     <header class="slds-modal__header">
-                        <h1 class="slds-text-heading--medium"> מחיקת צומת</h1>
+                        <h1 class="slds-text-heading--medium"> {labels.DeleteNode}</h1>
                         <lightning-button-icon icon-name="utility:close" size="large" class="slds-modal__close"
                             variant="bare-inverse" onclick={closeModal}>
                         </lightning-button-icon>
                     </header>
                     <div class="slds-modal__content slds-p-around_medium">
-                        <b class="slds-text-body_medium slds-text-color_error slds-p-around_small">האם ברצונך למחוק את
-                            הצומת הזה ?</b>
-                            <div if:true={removedNode.items.length}>
-                        <lightning-input if:true={removedNode.items.length} class="slds-p-around_small"
-                            onchange={removeAllChilds} checked={removeChilds} type="checkbox"
-                            label="מחק גם את כל הצמתים שתחת ענף זה"></lightning-input>
-                        <div if:false={removeChilds}
-                            class="remove-tree-choice slds-text-body_medium slds-p-around_small">
-                            בחר ענף אחר מהעץ אליו יועברו הצמתים שתחת הצומת שעתידה להמחק
-                            <lightning-tree onselect={handleSelect} selected-item={selectedBranch} items={branches}>
-                            </lightning-tree>
+                        <b class="slds-text-body_medium slds-text-color_error slds-p-around_small">{labels.DeleteNodeWarning}</b>
+                        <div if:true={removedNode.items.length}>
+                            <lightning-input if:true={removedNode.items.length} class="slds-p-around_small"
+                                onchange={removeAllChilds} checked={removeChilds} type="checkbox"
+                                label={labels.DeleteBranches}></lightning-input>
+                            <div if:false={removeChilds}
+                                class="remove-tree-choice slds-text-body_medium slds-p-around_small">
+                                
+                                <lightning-tree onselect={handleSelect} selected-item={selectedBranch} items={branches}>
+                                </lightning-tree>
+                            </div>
                         </div>
-                    </div>
                     </div>
                     <footer class="slds-modal__footer">
                         <lightning-layout horizontal-align="center" slot="footer">

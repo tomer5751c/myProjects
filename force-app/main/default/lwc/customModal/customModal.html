@@ -1,0 +1,34 @@
+<template>
+        <div>
+            <section role="dialog" tabindex="-1" class="modal-section slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h1 class="slds-text-heading--medium">{title}</h1>
+                        <template if:true={showCloseButton}>
+                            <lightning-button-icon icon-name="utility:close" size="large" class="slds-modal__close"
+                                variant="bare-inverse" onclick={closeModal}>
+                            </lightning-button-icon>
+                        </template>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <b class="slds-text-body_medium slds-text-color_error slds-p-around_small">{bodyMessage}</b>
+                        <slot></slot>
+                    </div>
+                    <footer if:true={showFooter} class="slds-modal__footer">
+                        <lightning-layout horizontal-align="center" slot="footer">
+                            <lightning-layout-item padding="horizontal-small">
+                                <lightning-button label={okOptionLabel} variant="brand" onclick={clickBtn} value='ok'>
+                                </lightning-button>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="horizontal-small">
+                                <lightning-button label={cancelOptionLabel} variant="neutral" onclick={clickBtn}
+                                    value='cancel'>
+                                </lightning-button>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+</template>

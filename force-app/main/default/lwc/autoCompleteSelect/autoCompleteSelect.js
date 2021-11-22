@@ -1,4 +1,5 @@
 import { LightningElement, api, track } from 'lwc';
+import { customLabels } from 'c/customLabelsHelper';
 
 export default class AutoCompleteSelect extends LightningElement {
 
@@ -77,11 +78,12 @@ export default class AutoCompleteSelect extends LightningElement {
     @track isInfo = false;
     autocompleteValue;
     init = false;
+    labels= customLabels;
 
     connectedCallback() {
         this.selectedItemValue = this.selectedItem;
         this.filteredValues = this.values;
-        this.placeholderValue = `בחר ${this.label}`
+        this.placeholderValue = `${this.labels.Select} ${this.label}`
         this.disabled = this.isDisabled;
         this.isError = this.errMessage == undefined || this.errMessage == '' ? false : true;
     }

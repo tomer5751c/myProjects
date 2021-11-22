@@ -2,3 +2,6 @@
     pointer-events: none;
     opacity: 0.4;
 }
+:host{
+    --sds-c-icon-color-foreground-default:#0070d2
+}   

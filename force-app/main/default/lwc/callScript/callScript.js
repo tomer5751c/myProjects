@@ -9,7 +9,9 @@ import getInfoArticles from '@salesforce/apex/TreeScriptCall.getInfoArticles';
 import { createRecord, deleteRecord, updateRecord } from 'lightning/uiRecordApi';
 import { decisionFields, DECISION_OBJECT, contentFields, CONTENT_OBJECT } from './callScriptHelper'
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import hasPermission from '@salesforce/customPermission/testAdmin';
+import hasPermission from '@salesforce/customPermission/showAdminActions';
+import { customLabels } from 'c/customLabelsHelper';
+
 export default class CallScript extends LightningElement {
 
     @api get treesIds(){
@@ -35,7 +37,8 @@ export default class CallScript extends LightningElement {
     removedNode;
     selectedBranch;
     adminPermission =hasPermission;
-    
+    labels = customLabels;
+
     @wire(getTrees,{treesIds:'$treesIds'}) getTrees({ data, error }) {
         if (data) {
             let options = [];

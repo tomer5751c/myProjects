@@ -1,6 +1,9 @@
 import { LightningElement, api, track } from 'lwc';
 import { loadStyle } from 'lightning/platformResourceLoader';
 import SAMPLE_CSS from '@salesforce/resourceUrl/customStyle';
+import DIR from '@salesforce/i18n/dir';
+import { customLabels } from 'c/customLabelsHelper';
+
 export default class TreeNodeItem extends LightningElement {
     @api node;
     @api htmlStr;
@@ -13,10 +16,13 @@ export default class TreeNodeItem extends LightningElement {
     @track overrideContent;
     @track closeDescrption = true;
     @track isArticleSource;
+    labels = customLabels;
+
     isShown
     selectedContent = { selectedValue: '' };
     selectedArticle = { selectedValue: '' };
     isNewSearch;
+    dir = DIR;
     formats = ['font', 'size', 'bold', 'italic', 'underline',
         'strike', 'list', 'indent', 'align', 'link',
         'image', 'clean', 'table', 'header', 'color', 'background', 'direction'];
@@ -281,7 +287,7 @@ export default class TreeNodeItem extends LightningElement {
         let copy = this.copyNode(this.node);
         //copy.isExpanded = true;
         this.isExpanded = true;
-        copy.items.push({ new: true, label: 'חדש', name: 'New node', items: [], level: this.node.level + 1, parentId: this.node.nodeId, lastItem: this.node.items.slice(-1)[0] });
+        copy.items.push({ new: true, label: this.labels.newLabel, name: 'New node', items: [], level: this.node.level + 1, parentId: this.node.nodeId, lastItem: this.node.items.slice(-1)[0] });
         this.node = copy;
         event.stopPropagation();
     }
@@ -343,5 +349,8 @@ export default class TreeNodeItem extends LightningElement {
     }
     get isItems() {
         this.node.items !== undefined
+    }
+    get isRTL(){
+        return this.dir ==='rtl';
     }
 }

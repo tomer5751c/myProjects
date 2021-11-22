@@ -21,3 +21,10 @@
 :host {
     --sds-c-checkbox-toggle-mark-color-foreground:transparent;
 }
+.best-answer{
+    --sds-c-icon-color-foreground-default:rgb(233, 230, 54);
+    --sds-c-button-success-color-background :rgb(151, 253, 160);
+}
+.show-content{
+    --sds-c-icon-color-foreground-default:#0070d2
+}   

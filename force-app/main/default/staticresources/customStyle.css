@@ -1,5 +1,6 @@
 .slds-tree [role=treeitem]:focus>.slds-tree__item{
     text-decoration: none;
+    background-color: transparent;
 }
 [aria-expanded=true]>.slds-tree__item .slds-button__icon{
     transform: rotate(0deg);
@@ -9,4 +10,7 @@
 }
 [dir=rtl] [aria-expanded=true]>.slds-tree__item .slds-button__icon{
     transform: rotate(0deg);
+}
+.slds-tree [role=treeitem]:hover>.slds-tree__item{
+    background-color: transparent;
 }

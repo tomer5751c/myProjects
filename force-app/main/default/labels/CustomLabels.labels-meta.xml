@@ -56,4 +56,148 @@
         <shortDescription>Enter Text</shortDescription>
         <value>Enter Text Here</value>
     </labels>
+    <labels>
+        <fullName>TreeTitle</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Tree Title</shortDescription>
+        <value>Call Script Tree</value>
+    </labels>
+    <labels>
+        <fullName>ChooseTree</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Choose Tree</shortDescription>
+        <value>Choose Tree</value>
+    </labels>
+    <labels>
+        <fullName>SearchByKeywords</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Search By Keywords</shortDescription>
+        <value>Search By Keywords</value>
+    </labels>
+    <labels>
+        <fullName>ContentAvailable</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Content Available</shortDescription>
+        <value>Content Available</value>
+    </labels>
+    <labels>
+        <fullName>HideContent</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>HideContent</shortDescription>
+        <value>Hide content or article</value>
+    </labels>
+    <labels>
+        <fullName>ViewContent</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ViewContent</shortDescription>
+        <value>View content or article</value>
+    </labels>
+    <labels>
+        <fullName>NewLable</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>New</shortDescription>
+        <value>New</value>
+    </labels>
+    <labels>
+        <fullName>DeleteNode</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete Node</shortDescription>
+        <value>Delete Node</value>
+    </labels>
+    <labels>
+        <fullName>DeleteNodeWarning</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Do you want to delete this node?</shortDescription>
+        <value>Do you want to delete this node?</value>
+    </labels>
+    <labels>
+        <fullName>DeleteBranches</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete all nodes under this branch</shortDescription>
+        <value>Delete all nodes under this branch</value>
+    </labels>
+    <labels>
+        <fullName>ArticleSelection</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>ArticleSelection</shortDescription>
+        <value>Article Selection</value>
+    </labels>
+    <labels>
+        <fullName>FreeText</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>FreeText</shortDescription>
+        <value>Free Text</value>
+    </labels>
+    <labels>
+        <fullName>SelectArticle</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>SelectArticle</shortDescription>
+        <value>Select Article</value>
+    </labels>
+    <labels>
+        <fullName>Content</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Content</shortDescription>
+        <value>Content</value>
+    </labels>
+    <labels>
+        <fullName>Article</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Article</shortDescription>
+        <value>Article</value>
+    </labels>
+    <labels>
+        <fullName>Select</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Select</shortDescription>
+        <value>Select</value>
+    </labels>
+    <labels>
+        <fullName>Canecl</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Canecl</shortDescription>
+        <value>Canecl</value>
+    </labels>
+    <labels>
+        <fullName>Delete</fullName>
+        <categories>Tree</categories>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Delete</shortDescription>
+        <value>Delete</value>
+    </labels>
 </CustomLabels>
